@@ -30,14 +30,15 @@ public class Main {
         }
         System.out.println(largerMeasurementCount);
 
+
         int largerSumCount = 0;
         int previousSum = Integer.MIN_VALUE;
         for (int i = 2; i < list.size() - 2; i++) {
             int currentSum = list.get(i - 2) + list.get(i - 1) + list.get(i);
-            if(currentSum>previousSum){
+            if (currentSum > previousSum) {
                 largerSumCount++;
             }
-            previousSum=currentSum;
+            previousSum = currentSum;
         }
         System.out.println(largerSumCount);
     }
