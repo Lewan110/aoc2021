@@ -12,6 +12,7 @@ public class Solution {
 
         List<String> input = FileExtractor.extractFile("src/pl/lewan/day3/input.txt");
         int numberLength = input.get(0).length();
+
         int[] zerosCount = new int[numberLength];
         int[] onesCount = new int[numberLength];
 
@@ -53,6 +54,7 @@ public class Solution {
             ArrayList<String> toRemove = getNumbersToRemove(calculateList, i, currentCommonNumber);
             calculateList.removeAll(toRemove);
         }
+
         int oxygenGeneratorRating = toDecimal(calculateList.get(0));
         System.out.println("oxygen generator rating: " + oxygenGeneratorRating);
 
