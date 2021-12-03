@@ -2,21 +2,18 @@ package pl.lewan.day3;
 
 import pl.lewan.FileExtractor;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Solution {
 
     public static void main(String[] args) {
 
         List<String> input = FileExtractor.extractFile("src/pl/lewan/day3/input.txt");
-
-        int[] zerosCount = new int[12];
-        int[] onesCount = new int[12];
+        int numberLength = input.get(0).length();
+        int[] zerosCount = new int[numberLength];
+        int[] onesCount = new int[numberLength];
 
         for (String s : input) {
             for (int j = 0; j < s.length(); j++) {
@@ -27,8 +24,9 @@ public class Solution {
                 }
             }
         }
-        int[] gamma = new int[12];
-        int[] epsilon = new int[12];
+
+        int[] gamma = new int[numberLength];
+        int[] epsilon = new int[numberLength];
         for (int i = 0; i < zerosCount.length; i++) {
             if (onesCount[i] > zerosCount[i]) {
                 gamma[i] = 1;
@@ -45,9 +43,9 @@ public class Solution {
         System.out.println("epsilon: " + toDecimal(epsilon));
         System.out.println("power: " + toDecimal(epsilon) * toDecimal(gamma));
 
-        int length = input.get(0).length();
+
         ArrayList<String> calculateList = new ArrayList<>(input);
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < numberLength; i++) {
             if (calculateList.size() == 1) {
                 continue;
             }
@@ -59,7 +57,7 @@ public class Solution {
         System.out.println("oxygen generator rating: " + oxygenGeneratorRating);
 
         calculateList = new ArrayList<>(input);
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < numberLength; i++) {
             if (calculateList.size() == 1) {
                 continue;
             }
