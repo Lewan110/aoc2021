@@ -1,25 +1,21 @@
 package pl.lewan.day2;
 
+import pl.lewan.FileExtractor;
+
 import java.util.List;
 
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 import static pl.lewan.day2.Direction.*;
 
 public class Solution {
 
     public static void main(String[] args) {
-        var fileName = "src/pl/lewan/day2/input.txt";
-        List<String> inputList = new java.util.ArrayList<>();
-
-        try (java.io.BufferedReader br = java.nio.file.Files.newBufferedReader(java.nio.file.Paths.get(fileName))) {
-            inputList = br.lines()
-                    .collect(java.util.stream.Collectors.toList());
-
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
+        List<String> inputList = FileExtractor.extractFile("src/pl/lewan/day2/input.txt");
         List<Command> commands = inputList.stream()
-                .map(line -> new Command(Direction.fromValue(line.split(" ")[0]), Integer.valueOf(line.split(" ")[1])))
-                .collect(java.util.stream.Collectors.toList());
+                .map(line -> new Command(Direction.fromValue(line.split(" ")[0]),
+                        Integer.valueOf(line.split(" ")[1])))
+                .collect(toList());
         int depth = 0;
         int horizontalPosition = 0;
         for (Command currentCommand : commands) {
@@ -68,7 +64,7 @@ enum Direction {
     }
 
     static Direction fromValue(String input) {
-        return java.util.Arrays.stream(values()).filter(value -> value.value.equals(input)).findFirst().orElse(null);
+        return stream(values()).filter(value -> value.value.equals(input)).findFirst().orElse(null);
     }
 
 }
@@ -77,15 +73,15 @@ class Command {
     private final Direction direction;
     private final Integer units;
 
-    public Direction getDirection() {
+    Direction getDirection() {
         return direction;
     }
 
-    public Integer getUnits() {
+    Integer getUnits() {
         return units;
     }
 
-    public Command(Direction direction, Integer units) {
+    Command(Direction direction, Integer units) {
         this.direction = direction;
         this.units = units;
     }

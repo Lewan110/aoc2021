@@ -1,5 +1,7 @@
 package pl.lewan.day1;
 
+import pl.lewan.FileExtractor;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,17 +13,11 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) {
-        var fileName = "src/pl/lewan/day1/input.txt";
-        List<Integer> list = new ArrayList<>();
+        List<Integer> list = FileExtractor.extractFile("src/pl/lewan/day1/input.txt")
+                .stream()
+                .map(Integer::valueOf)
+                .collect(Collectors.toList());
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) {
-            list = br.lines()
-                    .map(Integer::valueOf)
-                    .collect(Collectors.toList());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         int largerMeasurementCount = 0;
         for (int i = 1; i < list.size(); i++) {
             if (list.get(i - 1) < list.get(i)) {

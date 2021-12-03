@@ -1,5 +1,7 @@
 package pl.lewan.day3;
 
+import pl.lewan.FileExtractor;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,20 +12,13 @@ import java.util.stream.Collectors;
 public class Solution {
 
     public static void main(String[] args) {
-        var fileName = "src/pl/lewan/day3/test.txt";
-        List<String> inputList = new ArrayList<>();
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) {
-            inputList = br.lines().collect(Collectors.toList());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<String> input = FileExtractor.extractFile("src/pl/lewan/day3/input.txt");
 
         int[] zerosCount = new int[12];
         int[] onesCount = new int[12];
 
-        for (String s : inputList) {
+        for (String s : input) {
             for (int j = 0; j < s.length(); j++) {
                 if (s.charAt(j) == '0') {
                     zerosCount[j] += 1;
@@ -50,19 +45,44 @@ public class Solution {
         System.out.println("epsilon: " + toDecimal(epsilon));
         System.out.println("power: " + toDecimal(epsilon) * toDecimal(gamma));
 
-
-        int length = inputList.get(0).length();
-        ArrayList<String> calcs = new ArrayList<>(inputList);
+        int length = input.get(0).length();
+        ArrayList<String> calculateList = new ArrayList<>(input);
         for (int i = 0; i < length; i++) {
-            int currentCommonNumber = mostCommonOnPosition(i, calcs);
-            for (int j = 0; j < calcs.size(); j++) {
-                int charAt = (int) calcs.get(j).charAt(i) - '0';
-                if (charAt != currentCommonNumber) {
-                    calcs.remove(j);
-                }
+            if (calculateList.size() == 1) {
+                continue;
+            }
+            int currentCommonNumber = mostCommonOnPosition(i, calculateList);
+            ArrayList<String> toRemove = getNumbersToRemove(calculateList, i, currentCommonNumber);
+            calculateList.removeAll(toRemove);
+        }
+        int oxygenGeneratorRating = toDecimal(calculateList.get(0));
+        System.out.println("oxygen generator rating: " + oxygenGeneratorRating);
+
+        calculateList = new ArrayList<>(input);
+        for (int i = 0; i < length; i++) {
+            if (calculateList.size() == 1) {
+                continue;
+            }
+            int currentCommonNumber = leastCommonOnPosition(i, calculateList);
+            ArrayList<String> toRemove = getNumbersToRemove(calculateList, i, currentCommonNumber);
+            calculateList.removeAll(toRemove);
+        }
+        int scrubberRating = toDecimal(calculateList.get(0));
+        System.out.println("CO2 scrubber rating: " + scrubberRating);
+
+        System.out.println("life support rating: " + scrubberRating * oxygenGeneratorRating);
+    }
+
+    private static ArrayList<String> getNumbersToRemove(
+            ArrayList<String> calculateList, int i, int currentCommonNumber) {
+        ArrayList<String> toRemove = new ArrayList<>();
+        for (String value : calculateList) {
+            int charAt = (int) value.charAt(i) - '0';
+            if (charAt != currentCommonNumber) {
+                toRemove.add(value);
             }
         }
-        int test = 2;
+        return toRemove;
     }
 
     private static int mostCommonOnPosition(int position, List<String> input) {
@@ -77,7 +97,14 @@ public class Solution {
             }
         }
         return amountOfOne >= amountOfZero ? 1 : 0;
+    }
 
+    private static int leastCommonOnPosition(int position, List<String> input) {
+        return mostCommonOnPosition(position, input) ^ 1;
+    }
+
+    private static int toDecimal(String value) {
+        return Integer.parseInt(value, 2);
     }
 
     private static int toDecimal(int[] binaryNumber) {
