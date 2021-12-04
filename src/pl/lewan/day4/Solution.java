@@ -78,22 +78,13 @@ public class Solution {
     private static List<BingoBoard> getBingoBoards(String fileLocation) throws FileNotFoundException {
         List<BingoBoard> matrixList = new ArrayList<>();
         Scanner sc = new Scanner(new BufferedReader(new FileReader(fileLocation)));
-        skipLines(sc, 2);
-
+        sc.nextLine();
+        sc.nextLine();
         while (sc.hasNextLine()) {
             int[][] matrix = readSingleMatrix(sc);
             matrixList.add(new BingoBoard(matrix));
-            System.out.println(Arrays.deepToString(matrix));
         }
         return matrixList;
-    }
-
-
-    private static void skipLines(Scanner sc, int linesToSkip) {
-        for (int i = 0; i < linesToSkip; i++) {
-            sc.nextLine();
-        }
-
     }
 
     private static int[][] readSingleMatrix(Scanner sc) {
