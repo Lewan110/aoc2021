@@ -1,6 +1,7 @@
 package pl.lewan.day4;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -22,26 +23,45 @@ public class Solution {
                 .map(Integer::valueOf)
                 .collect(Collectors.toList());
 
-        System.out.println(numbers);
-        List<BingoBoard> matrixList = new ArrayList<>();
-        Scanner sc = new Scanner(new BufferedReader(new FileReader(fileLocation)));
-        skipLines(sc, 2);
-
-        while (sc.hasNextLine()) {
-            int[][] matrix = readSingleMatrix(sc);
-            matrixList.add(new BingoBoard(matrix));
-            System.out.println(Arrays.deepToString(matrix));
-        }
+        List<BingoBoard> matrixList = getBingoBoards(fileLocation);
         var board = getWinningBoard(numbers, matrixList);
         if (board.isPresent()) {
             BingoBoard winningBoard = board.get();
+            System.out.println("PART 1");
             System.out.println("last marked number: " + winningBoard.getLastMarked());
             System.out.println("unmarked sum: " + winningBoard.getUnmarkedSum());
             System.out.println("score: " + winningBoard.getUnmarkedSum() * winningBoard.getLastMarked());
         }
 
+        matrixList = getBingoBoards(fileLocation);
+        var lastWinningBoard = getLastWinningBoard(numbers, matrixList);
+        if (lastWinningBoard.isPresent()) {
+            BingoBoard winningBoard = lastWinningBoard.get();
+            System.out.println("PART 2");
+            System.out.println("last marked number: " + winningBoard.getLastMarked());
+            System.out.println("unmarked sum: " + winningBoard.getUnmarkedSum());
+            System.out.println("score: " + winningBoard.getUnmarkedSum() * winningBoard.getLastMarked());
+        }
     }
 
+    private static Optional<BingoBoard> getLastWinningBoard(List<Integer> numbers, List<BingoBoard> matrixList) {
+        int winningBoardsCount = 0;
+        for (Integer number : numbers) {
+            for (BingoBoard bingoBoard : matrixList) {
+                if (bingoBoard.isWinningBoard()) {
+                    continue;
+                }
+                bingoBoard.markNumber(number);
+                if (bingoBoard.isWinningBoard()) {
+                    winningBoardsCount++;
+                    if (winningBoardsCount == matrixList.size()) {
+                        return Optional.of(bingoBoard);
+                    }
+                }
+            }
+        }
+        return Optional.empty();
+    }
 
     private static Optional<BingoBoard> getWinningBoard(List<Integer> numbers, List<BingoBoard> matrixList) {
         for (Integer number : numbers) {
@@ -53,6 +73,19 @@ public class Solution {
             }
         }
         return Optional.empty();
+    }
+
+    private static List<BingoBoard> getBingoBoards(String fileLocation) throws FileNotFoundException {
+        List<BingoBoard> matrixList = new ArrayList<>();
+        Scanner sc = new Scanner(new BufferedReader(new FileReader(fileLocation)));
+        skipLines(sc, 2);
+
+        while (sc.hasNextLine()) {
+            int[][] matrix = readSingleMatrix(sc);
+            matrixList.add(new BingoBoard(matrix));
+            System.out.println(Arrays.deepToString(matrix));
+        }
+        return matrixList;
     }
 
 
@@ -82,8 +115,6 @@ public class Solution {
         }
         return matrix;
     }
-
-
 }
 
 class BingoBoard {
