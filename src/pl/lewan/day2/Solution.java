@@ -5,7 +5,6 @@ import pl.lewan.FileExtractor;
 import java.util.List;
 
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
 import static pl.lewan.day2.Direction.*;
 
 public class Solution {
@@ -15,38 +14,32 @@ public class Solution {
         List<Command> commands = inputList.stream()
                 .map(line -> new Command(Direction.fromValue(line.split(" ")[0]),
                         Integer.valueOf(line.split(" ")[1])))
-                .collect(toList());
+                .toList();
         int depth = 0;
         int horizontalPosition = 0;
         for (Command currentCommand : commands) {
-            if (currentCommand.getDirection() == FORWARD) {
-                horizontalPosition += currentCommand.getUnits();
-            }
-            if (currentCommand.getDirection() == DOWN) {
-                depth -= currentCommand.getUnits();
-            }
-            if (currentCommand.getDirection() == UP) {
-                depth += currentCommand.getUnits();
+            switch (currentCommand.getDirection()) {
+                case FORWARD -> horizontalPosition += currentCommand.getUnits();
+                case DOWN -> depth -= currentCommand.getUnits();
+                case UP -> depth += currentCommand.getUnits();
             }
         }
-        System.out.println("solution: " + depth * horizontalPosition);
+        System.out.println("PART 1: " + Math.abs(depth * horizontalPosition));
 
         int depth2 = 0;
         int horizontalPosition2 = 0;
         int aim = 0;
         for (Command currentCommand : commands) {
-            if (currentCommand.getDirection() == FORWARD) {
-                horizontalPosition2 += currentCommand.getUnits();
-                depth2 += aim * currentCommand.getUnits();
-            }
-            if (currentCommand.getDirection() == DOWN) {
-                aim += currentCommand.getUnits();
-            }
-            if (currentCommand.getDirection() == UP) {
-                aim -= currentCommand.getUnits();
+            switch (currentCommand.getDirection()) {
+                case FORWARD -> {
+                    horizontalPosition2 += currentCommand.getUnits();
+                    depth2 += aim * currentCommand.getUnits();
+                }
+                case DOWN -> aim += currentCommand.getUnits();
+                case UP -> aim -= currentCommand.getUnits();
             }
         }
-        System.out.println("solution2: " + depth2 * horizontalPosition2);
+        System.out.println("PART 2: " + depth2 * horizontalPosition2);
 
     }
 }
@@ -69,10 +62,7 @@ enum Direction {
 
 }
 
-class Command {
-    private final Direction direction;
-    private final Integer units;
-
+record Command(Direction direction, Integer units) {
     Direction getDirection() {
         return direction;
     }
@@ -81,8 +71,4 @@ class Command {
         return units;
     }
 
-    Command(Direction direction, Integer units) {
-        this.direction = direction;
-        this.units = units;
-    }
 }

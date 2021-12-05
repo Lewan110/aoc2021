@@ -31,13 +31,13 @@ public class Solution {
                 } else {
                     if (x1 > x2 && y1 < y2) {
                         int tempY = y2;
-                        for (int i = Math.min(x1, x2); i <= limit; i++) {
+                        for (int i = x2; i <= limit; i++) {
                             ventsMap[tempY][i] += 1;
                             tempY--;
                         }
                     } else if (x1 < x2 && y1 > y2) {
                         int tempY = y1;
-                        for (int i = Math.min(x1, x2); i <= limit; i++) {
+                        for (int i = x1; i <= limit; i++) {
                             ventsMap[tempY][i] += 1;
                             tempY--;
                         }

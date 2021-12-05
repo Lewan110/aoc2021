@@ -16,7 +16,7 @@ public class Main {
         List<Integer> list = FileExtractor.extractFile("src/pl/lewan/day1/input.txt")
                 .stream()
                 .map(Integer::valueOf)
-                .collect(Collectors.toList());
+                .toList();
 
         int largerMeasurementCount = 0;
         for (int i = 1; i < list.size(); i++) {

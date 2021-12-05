@@ -21,7 +21,7 @@ public class Solution {
 
         List<Integer> numbers = Arrays.stream(firstLine.split(","))
                 .map(Integer::valueOf)
-                .collect(Collectors.toList());
+                .toList();
 
         List<BingoBoard> matrixList = getBingoBoards(fileLocation);
         var board = getWinningBoard(numbers, matrixList);
@@ -99,7 +99,7 @@ public class Solution {
                     .filter(number -> !" ".equals(number))
                     .filter(number -> !"".equals(number))
                     .map(Integer::valueOf)
-                    .collect(Collectors.toList());
+                    .toList();
             for (int j = 0; j < COLUMN_SIZE; j++) {
                 matrix[i][j] = lineNumbers.get(j);
             }
@@ -109,8 +109,8 @@ public class Solution {
 }
 
 class BingoBoard {
-    private int[][] matrix;
-    private boolean[][] marked;
+    private final int[][] matrix;
+    private final boolean[][] marked;
     private int lastMarked;
 
     BingoBoard(int[][] matrix) {
