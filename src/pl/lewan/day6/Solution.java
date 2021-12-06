@@ -19,14 +19,14 @@ public class Solution {
     }
 
     private static Long calculate(List<Integer> fishList, int days) {
-        long[] ages = new long[9];
+        long[] fishesAge = new long[9];
         for (int fish : fishList) {
-            ages[fish] += 1;
+            fishesAge[fish] += 1;
         }
         for (int i = 0; i < days; i++) {
-            ages[(i + 7) % 9] += ages[i % 9];
+            fishesAge[(i + 7) % 9] += fishesAge[i % 9];
         }
-        return LongStream.of(ages).sum();
+        return LongStream.of(fishesAge).sum();
     }
 
 
