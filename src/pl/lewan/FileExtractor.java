@@ -1,12 +1,9 @@
 package pl.lewan;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FileExtractor {
@@ -31,5 +28,21 @@ public class FileExtractor {
             e.printStackTrace();
         }
         return firstLine;
+    }
+
+    public static int[][] readMap(String location, int rowSize, int columnSize) throws FileNotFoundException {
+        Scanner sc = new Scanner(new BufferedReader(new FileReader(location)));
+        int[][] matrix = new int[rowSize][columnSize];
+        for (int i = 0; i < rowSize; i++) {
+            String nextLine = sc.nextLine();
+            String[] readLine = nextLine.trim().split("");
+            List<Integer> lineNumbers = Arrays.stream(readLine)
+                    .map(Integer::valueOf)
+                    .toList();
+            for (int j = 0; j < columnSize; j++) {
+                matrix[i][j] = lineNumbers.get(j);
+            }
+        }
+        return matrix;
     }
 }
